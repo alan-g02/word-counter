@@ -6,12 +6,12 @@
  */
 
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
     application
+    jacoco // Code coverage
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
+    // Used to resolve dependencies
     mavenCentral()
 }
 
@@ -33,4 +33,27 @@ java {
 application {
     // Define the main class for the application.
     mainClass = "org.example.App"
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+tasks.jacocoTestCoverageVerification {
+    // Minumum coverage of 90% required
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.9".toBigDecimal()
+            }
+        }
+    }
 }
